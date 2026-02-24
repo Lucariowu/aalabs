@@ -1,0 +1,345 @@
+\documentclass{labreport}
+
+\begin{document}
+
+\labtitle
+    {1}
+    {Empirical Analysis of Five Algorithms for the Fibonacci N-th Term}
+    {st. gr. FAF-243}
+    {Soimu Ionut}
+    {asist. univ. Fistic Cristofor}
+
+% Table of contents
+\tableofcontents
+\newpage
+
+\lstset{style=python}
+
+\section{Algorithm Analysis}
+
+\subsection{Objective}
+Study and analyze five algorithms for determining Fibonacci n-th term.
+
+\subsection{Tasks}
+\begin{enumerate}
+    \item Implement at least 3 algorithms for determining Fibonacci n-th term;
+    \item Decide properties of input format that will be used for algorithm analysis;
+    \item Decide the comparison metric for the algorithms;
+    \item Analyze empirically the algorithms;
+    \item Present the results of the obtained data;
+    \item Deduce conclusions of the laboratory.
+\end{enumerate}
+
+\subsection{Theoretical Notes}
+An alternative to mathematical analysis of complexity is empirical analysis.
+This may be useful for: obtaining preliminary information on the complexity class of an
+algorithm; comparing the efficiency of two (or more) algorithms for solving the same problems;
+comparing the efficiency of several implementations of the same algorithm; obtaining information on the
+efficiency of implementing an algorithm on a particular computer.
+In the empirical analysis of an algorithm, the following steps are usually followed:
+\begin{enumerate}
+    \item The purpose of the analysis is established.
+    \item Choose the efficiency metric to be used (number of executions of an operation (s) or time
+execution of all or part of the algorithm.
+    \item The properties of the input data in relation to which the analysis is performed are established
+(data size or specific properties).
+    \item The algorithm is implemented in a programming language.
+    \item Generating multiple sets of input data.
+    \item Run the program for each input data set.
+    \item The obtained data are analyzed.
+\end{enumerate}
+The choice of the efficiency measure depends on the purpose of the analysis. If, for example, the
+aim is to obtain information on the complexity class or even checking the accuracy of a theoretical
+estimate then it is appropriate to use the number of operations performed. But if the goal is to assess the
+behavior of the implementation of an algorithm then execution time is appropriate.
+After the execution of the program with the test data, the results are recorded and, for the purpose
+of the analysis, either synthetic quantities (mean, standard deviation, etc.) are calculated or a graph with
+appropriate pairs of points (i.e. problem size, efficiency measure) is plotted.
+
+\subsection{Introduction}
+The Fibonacci sequence is the series of numbers where each number is the sum of the two
+preceding numbers. For example: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, …
+Mathematically we can describe this as: xn= xn-1 + xn-2.
+Many sources claim this sequence was first discovered or "invented" by Leonardo Fibonacci. The
+Italian mathematician, who was born around A.D. 1170, was initially known as Leonardo of Pisa. In the
+19th century, historians came up with the nickname Fibonacci (roughly meaning "son of the Bonacci
+clan") to distinguish the mathematician from another famous Leonardo of Pisa.
+There are others who say he did not. Keith Devlin, the author of Finding Fibonacci: The Quest to
+Rediscover the Forgotten Mathematical Genius Who Changed the World, says there are ancient Sanskrit
+texts that use the Hindu-Arabic numeral system - predating Leonardo of Pisa by centuries.
+But, in 1202 Leonardo of Pisa published a mathematical text, Liber Abaci. It was a “cookbook” written
+for tradespeople on how to do calculations. The text laid out the Hindu-Arabic arithmetic useful for
+tracking profits, losses, remaining loan balances, etc, introducing the Fibonacci sequence to the Western
+world.
+Traditionally, the sequence was determined just by adding two predecessors to obtain a new
+number, however, with the evolution of computer science and algorithmics, several distinct methods for
+determination have been uncovered. The methods can be grouped in 4 categories, Recursive Methods,
+Dynamic Programming Methods, Matrix Power Methods, and Benet Formula Methods. All those can be
+implemented naively or with a certain degree of optimization, that boosts their performance during
+analysis.
+As mentioned previously, the performance of an algorithm can be analyzed mathematically
+(derived through mathematical reasoning) or empirically (based on experimental observations).
+Within this laboratory, we will be analyzing five distinct algorithms empirically.
+
+\subsection{Comparison Metric}
+The comparison metric for this laboratory work will be considered the time of execution of each
+algorithm (T(n))
+
+\subsection{Input Format}
+As input, each algorithm will receive two series of numbers that will contain the order of the
+Fibonacci terms being looked up. The first series will have a more limited scope, (5, 7, 10, 12, 15, 17, 20,
+22, 25, 27, 30, 32, 35, 37, 40, 42, 45), to capture low-scale behavior, while the second series will
+have a bigger scope to be able to compare the algorithms between themselves (501, 631, 794, 1000,
+1259, 1585, 1995, 2512, 3162, 3981, 5012, 6310, 7943, 10000, 12589, 15849).
+
+\newpage
+\section{Implementation}
+All five algorithms will be implemented in their naive form in Python and analyzed empirically based on the time required for their completion. While the general trend of the results may besimilar to other experimental observations, the particular efficiency in rapport with input will vary depending on memory of the device used.
+
+The measurement error margin is influenced by OS scheduling and interpreter overhead. For this reason, we focus on the overall trend rather than individual outliers, and we compare algorithms using the same input set.
+
+\subsection{Algorithm 1: Iterative Linear Method}
+\textbf{Description:} Computes Fibonacci numbers using a simple loop and constant space. Time complexity is $O(n)$ and space complexity is $O(1)$.
+
+The algorithm keeps only the two most recent values. It represents the simplest efficient baseline and highlights the expected linear growth when $n$ increases.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+Fibonacci(n):
+    a <- 0
+    b <- 1
+    repeat n times:
+        a, b <- b, a + b
+    return a
+\end{lstlisting}
+
+\textbf{Python Preview:}
+\begin{lstlisting}[language=Python]
+def fib_iterative(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+\end{lstlisting}
+
+\textbf{Results:}
+\input{results/iterative_table.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/iterative.png}
+    \caption{Iterative Linear Method}
+\end{figure}
+
+The timing curve shows steady linear growth with small fluctuations. This method is stable and avoids recursion overhead, making it a reliable reference for the other approaches.
+
+\subsection{Algorithm 2: Memoized Recursion}
+\textbf{Description:} Uses top-down recursion with memoization. Each term is computed once, yielding $O(n)$ time and $O(n)$ space.
+
+The memoized approach trades extra memory for speed by caching intermediate results. In practice, it behaves similarly to the iterative method but with higher constant overhead because of dictionary lookups.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+Fibonacci(n):
+    memo <- empty map
+    function solve(k):
+        if k < 2: return k
+        if k in memo: return memo[k]
+        memo[k] <- solve(k-1) + solve(k-2)
+        return memo[k]
+    return solve(n)
+\end{lstlisting}
+
+\textbf{Python Preview:}
+\begin{lstlisting}[language=Python]
+def fib_memoized(n):
+    if n < 2:
+        return n
+
+    memo = {0: 0, 1: 1}
+    stack = [n]
+    while stack:
+        k = stack.pop()
+        if k in memo:
+            continue
+        k1, k2 = k - 1, k - 2
+        if k1 in memo and k2 in memo:
+            memo[k] = memo[k1] + memo[k2]
+            continue
+        stack.append(k)
+        if k1 not in memo:
+            stack.append(k1)
+        if k2 not in memo:
+            stack.append(k2)
+    return memo[n]
+\end{lstlisting}
+
+\textbf{Results:}
+\input{results/memoized_table.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/memoized.png}
+    \caption{Memoized Recursion}
+\end{figure}
+
+The graph closely matches the iterative method, but the curve is slightly higher due to memo management. It remains linear and stable for the full input range.
+
+\subsection{Algorithm 3: Fast Doubling}
+\textbf{Description:} Uses doubling identities to compute $F(n)$ in $O(\log n)$ time and $O(\log n)$ space due to recursion depth.
+
+This method reduces the problem size by half on each step and derives pairs $(F(k), F(k+1))$. It is efficient for large $n$ because the number of multiplications grows logarithmically.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+Fibonacci(n):
+    function solve(k):
+        if k == 0: return (0, 1)
+        (a, b) <- solve(k // 2)
+        c <- a * (2*b - a)
+        d <- a*a + b*b
+        if k is even: return (c, d)
+        else: return (d, c + d)
+    return solve(n).first
+\end{lstlisting}
+
+\textbf{Python Preview:}
+\begin{lstlisting}[language=Python]
+def fib_fast_doubling(n):
+    def solve(k):
+        if k == 0:
+            return (0, 1)
+        a, b = solve(k // 2)
+        c = a * (2 * b - a)
+        d = a * a + b * b
+        if k % 2 == 0:
+            return (c, d)
+        return (d, c + d)
+    return solve(n)[0]
+\end{lstlisting}
+
+\textbf{Results:}
+\input{results/fast_doubling_table.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fast_doubling.png}
+    \caption{Fast Doubling Method}
+\end{figure}
+
+The timing curve shows only mild growth as $n$ increases, reflecting the $O(\log n)$ complexity. Compared to linear methods, the advantage becomes more visible for the larger inputs.
+
+\subsection{Algorithm 4: Binomial Sum Formula}
+\textbf{Description:} Uses the combinatorial identity $F(n)=\sum_{k=0}^{\lfloor (n-1)/2 \rfloor} \binom{n-k-1}{k}$. The implementation updates terms iteratively in $O(n)$ time.
+
+The terms are computed with integer arithmetic to avoid rounding errors. While the complexity is linear, each iteration involves several multiplications and divisions, leading to a larger constant factor.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+Fibonacci(n):
+    if n == 0: return 0
+    max_k <- floor((n - 1) / 2)
+    term <- 1
+    sum <- 0
+    for k from 0 to max_k:
+        sum <- sum + term
+        if k < max_k:
+            term <- term * (n - 2*k - 1) * (n - 2*k - 2)
+            term <- term / ((k + 1) * (n - k - 1))
+    return sum
+\end{lstlisting}
+
+\textbf{Python Preview:}
+\begin{lstlisting}[language=Python]
+def fib_binomial(n):
+    if n == 0:
+        return 0
+    max_k = (n - 1) // 2
+    term = 1
+    total = 0
+    for k in range(max_k + 1):
+        total += term
+        if k < max_k:
+            numerator = (n - 2 * k - 1) * (n - 2 * k - 2)
+            denominator = (k + 1) * (n - k - 1)
+            term = term * numerator // denominator
+    return total
+\end{lstlisting}
+
+\textbf{Results:}
+\input{results/binomial_table.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/binomial.png}
+    \caption{Binomial Sum Method}
+\end{figure}
+
+The resulting curve is linear but sits above the iterative and memoized curves. This matches the expectation that the extra arithmetic increases the runtime per step.
+
+\subsection{Algorithm 5: Fast Matrix Exponentiation}
+\textbf{Description:} Computes $Q^n$ for $Q=\begin{pmatrix}1&1\\1&0\end{pmatrix}$ using exponentiation by squaring. This method runs in $O(\log n)$ time.
+
+Each squaring step multiplies two $2\times2$ matrices, which increases the constant cost per loop iteration. Nevertheless, the number of iterations is logarithmic in $n$.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+Fibonacci(n):
+    if n == 0: return 0
+    result <- identity 2x2
+    base <- [[1, 1], [1, 0]]
+    while n > 0:
+        if n is odd: result <- result * base
+        base <- base * base
+        n <- n // 2
+    return result[0][1]
+\end{lstlisting}
+
+\textbf{Python Preview:}
+\begin{lstlisting}[language=Python]
+def fib_matrix_fast(n):
+    if n == 0:
+        return 0
+
+    def mat_mul(a, b):
+        return [
+            [a[0][0] * b[0][0] + a[0][1] * b[1][0],
+             a[0][0] * b[0][1] + a[0][1] * b[1][1]],
+            [a[1][0] * b[0][0] + a[1][1] * b[1][0],
+             a[1][0] * b[0][1] + a[1][1] * b[1][1]],
+        ]
+
+    def mat_pow(p):
+        result = [[1, 0], [0, 1]]
+        base = [[1, 1], [1, 0]]
+        while p > 0:
+            if p & 1:
+                result = mat_mul(result, base)
+            base = mat_mul(base, base)
+            p >>= 1
+        return result
+
+    return mat_pow(n)[0][1]
+\end{lstlisting}
+
+\textbf{Results:}
+\input{results/matrix_fast_table.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/matrix_fast.png}
+    \caption{Fast Matrix Exponentiation}
+\end{figure}
+
+The curve is similar to fast doubling but slightly higher due to the extra matrix multiplication overhead. It remains efficient for large inputs and confirms the expected $O(\log n)$ behavior.
+
+\subsection{Combined Comparison}
+A combined plot provides a direct comparison between all algorithms. A logarithmic $y$-axis is used for readability.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/comparison.png}
+    \caption{Comparison of All Methods (log scale)}
+\end{figure}
+
+\section{Conclusion}
+For small inputs, the iterative linear method is the best practical choice due to its minimal overhead and constant memory usage. When a recursive style is desired while still avoiding exponential blowup, the memoized method is acceptable, but it uses more memory and is slightly slower than the iterative approach.
+
+For medium to large inputs, the fast doubling method provides the best performance in this experiment because it achieves $O(\log n)$ growth with low constant factors. Fast matrix exponentiation is also efficient for large inputs, but its additional matrix multiplications make it slower than fast doubling in most cases. The binomial sum method is correct and linear, yet its heavier arithmetic makes it the least attractive among the linear-time methods, so it is best reserved for demonstrative or combinatorial contexts rather than performance-sensitive use.
+
+\end{document}

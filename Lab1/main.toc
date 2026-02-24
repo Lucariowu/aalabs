@@ -1,0 +1,16 @@
+\babel@toc {UKenglish}{}\relax 
+\contentsline {section}{\numberline {1}Algorithm Analysis}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objective}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Tasks}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Theoretical Notes}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Introduction}{3}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Comparison Metric}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Input Format}{3}{subsection.1.6}%
+\contentsline {section}{\numberline {2}Implementation}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Algorithm 1: Iterative Linear Method}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Algorithm 2: Memoized Recursion}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Algorithm 3: Fast Doubling}{8}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Algorithm 4: Binomial Sum Formula}{10}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Algorithm 5: Fast Matrix Exponentiation}{12}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Combined Comparison}{15}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Conclusion}{16}{section.3}%
