@@ -1,6 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1771871987.50642 "/home/ionut/Programming/AA/Lab2/main.tex" "main.pdf" "main" 1771871988.34086 0
-  "/home/ionut/Programming/AA/Lab2/main.tex" 1771871984.11916 14917 0a4ff64ff70bf1525700c64f0cdaa0ac ""
+["pdflatex"] 1771927593.1818 "main.tex" "main.pdf" "main" 1771927593.93676 0
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1767555874 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1767555874 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1767555874 1408 5937f58aa508ea2cea4901c07d10f5fe ""
@@ -121,10 +120,10 @@
   "figures/quicksort.png" 1771870991.78651 62329 1fc52f867093c24d4d70dabaa64d0dbd ""
   "figures/shellsort.png" 1771870998.18712 62725 7e2d28be91f196abf1c7671defecac84 ""
   "labreport.cls" 1771870803.02996 2567 a6788fff07ea40d590c9f4efae9590ad ""
-  "main.aux" 1771871988.29555 3238 daebd03332abc37d1ee3bdddd5fd4107 "pdflatex"
-  "main.out" 1771871988.29555 1900 04807a992fd62155c7485687582bfdb1 "pdflatex"
-  "main.tex" 1771871984.11916 14917 0a4ff64ff70bf1525700c64f0cdaa0ac ""
-  "main.toc" 1771871988.29712 1149 a52971207660cec1ab767798cfd15516 "pdflatex"
+  "main.aux" 1771927593.88823 3341 7424155128957ac8cc0ddc79fd07d8de "pdflatex"
+  "main.out" 1771927593.88923 1969 fd02221ecef57af5812a159fda6d117d "pdflatex"
+  "main.tex" 1771927582.58015 15133 42f0487463b47f22acabe89ae257035f ""
+  "main.toc" 1771927593.88923 1211 71d32e07580eb385ffdefff0acbbea4c "pdflatex"
   "results/heapsort_table.tex" 1771870995.22103 349 500dc4bbe2584f102770407e83b0b030 ""
   "results/mergesort_table.tex" 1771870993.26565 350 640639b0b942f59083cdba79df4d254b ""
   "results/quicksort_table.tex" 1771870991.63051 350 e63a5db1da1254357daecaecdb84657a ""
