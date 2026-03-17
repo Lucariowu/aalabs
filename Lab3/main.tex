@@ -1,0 +1,264 @@
+\documentclass{labreport}
+
+\begin{document}
+
+\labtitle
+    {3}
+    {Empirical Analysis of Graph Traversal Algorithms: BFS and DFS}
+    {st. gr. FAF-243}
+    {Soimu Ionut}
+    {asist. univ. Fistic Cristofor}
+
+% Table of contents
+\tableofcontents
+\newpage
+
+\lstset{style=python}
+
+\section{Algorithm Analysis}
+
+\subsection{Objective}
+Study and empirically analyze two graph traversal algorithms: Breadth-First Search (BFS) and Depth-First Search (DFS).
+
+\subsection{Tasks}
+\begin{enumerate}
+    \item Implement BFS and DFS in a programming language;
+    \item Establish properties of the input data for the analysis;
+    \item Choose metrics for comparing the algorithms;
+    \item Perform empirical analysis of the algorithms;
+    \item Present the obtained data graphically;
+    \item Draw conclusions from the obtained results.
+\end{enumerate}
+
+\subsection{Theoretical Notes}
+Graph traversal algorithms are fundamental in algorithmics. Given a graph $G=(V,E)$ and a start node $s$, traversal means systematically visiting the vertices that are reachable from $s$.
+
+Breadth-First Search (BFS) explores the graph level by level. It visits all vertices at distance 1 from the source, then all vertices at distance 2, and so on. Because of this layered expansion, BFS computes shortest path lengths in unweighted graphs.
+
+Depth-First Search (DFS) explores one branch as deeply as possible before backtracking. DFS is useful for connectivity checks, cycle detection, topological sorting, and identifying components.
+
+Both BFS and DFS have theoretical time complexity $O(|V|+|E|)$ when implemented with adjacency lists. In practice, however, execution time can differ due to constant factors, memory access patterns, and the behavior of auxiliary structures (queue for BFS, stack for DFS).
+
+As in any empirical study, absolute timing values depend on hardware, operating system scheduling, and interpreter overhead. For this reason, the focus is placed on trends and relative differences.
+
+\subsection{Introduction}
+Traversal is usually the first operation applied to a graph before solving more advanced problems. For example, shortest path routines on unweighted graphs start from BFS, while many structural analyses are built around DFS.
+
+Even though the two algorithms share the same asymptotic complexity, their practical behavior can still differ. BFS keeps a frontier of all nodes from the current layer, which may become large on wide graphs. DFS typically keeps a path-oriented stack and often uses less active memory at a given moment, depending on the graph shape.
+
+In this laboratory, both algorithms are implemented in Python and tested on randomly generated connected undirected graphs of increasing size. The goal is to compare their behavior under identical input conditions.
+
+\subsection{Comparison Metric}
+The empirical comparison is based on eight criteria:
+\begin{enumerate}
+    \item Execution time scaling on connected sparse graphs ($n$ increasing, $m \approx 4n$);
+    \item Chain/Path (deep target);
+    \item Balanced Tree (deep leaf target);
+    \item Dense/Complete (near-source target);
+    \item Grid (opposite-corner target);
+    \item Deep vs Shallow (same graph, two target depths);
+    \item Large Random (random target);
+    \item Disconnected (unreachable target).
+\end{enumerate}
+
+All criteria are tested five times per algorithm. Reported values use average execution time, measured with Python's \texttt{perf\_counter}.
+
+\subsection{Input Format}
+The input for each run is a connected undirected graph represented as adjacency lists. Graph sizes are defined by the number of vertices $n$, with a near-linear number of edges $m \approx 4n$.
+
+For every size, the graph is generated in two steps:
+\begin{enumerate}
+    \item A random spanning tree is created to guarantee connectivity;
+    \item Extra random edges are added until the target edge count is reached.
+\end{enumerate}
+
+All algorithms receive the same pre-generated graph for each size, and a fixed random seed is used for reproducibility.
+
+Besides the size-scaling dataset, a dedicated scenario dataset is also used (with higher priority in analysis):
+\begin{enumerate}
+    \item Chain/Path with a deep target;
+    \item Balanced Tree with a deep leaf target;
+    \item Dense/Complete graph with a near-source target;
+    \item Grid with opposite-corner target;
+    \item Deep vs Shallow targets on the same tree;
+    \item Large Random graph with random target;
+    \item Disconnected graph with unreachable target.
+\end{enumerate}
+
+\newpage
+\section{Algorithm Implementation}
+Both algorithms are implemented iteratively in Python so that the comparison is not affected by recursion depth limits and call-stack overhead.
+
+\subsection{Breadth-First Search (BFS)}
+\textbf{Description:} Breadth-First Search starts from the source node and explores vertices in increasing distance order. It uses a FIFO queue, so all nodes at depth $d$ are processed before nodes at depth $d+1$. This makes BFS suitable for shortest-path discovery in unweighted graphs. With adjacency lists, the running time is $O(|V|+|E|)$, and the auxiliary space is $O(|V|)$ in the worst case because a full frontier can be stored in the queue.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+BFS(graph, source):
+    visited <- array[|V|] initialized false
+    queue <- empty FIFO queue
+    visited[source] <- true
+    push source in queue
+
+    while queue not empty:
+        u <- pop from front
+        for each v in graph[u]:
+            if not visited[v]:
+                visited[v] <- true
+                push v in queue
+\end{lstlisting}
+
+\textbf{Python code:}
+\begin{lstlisting}[language=Python]
+from collections import deque
+
+def bfs(graph, source=0):
+    visited = [False] * len(graph)
+    queue = deque([source])
+    visited[source] = True
+
+    while queue:
+        node = queue.popleft()
+        for neighbor in graph[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+\end{lstlisting}
+
+\subsection{Depth-First Search (DFS)}
+\textbf{Description:} Depth-First Search follows one branch as deep as possible before backtracking. It uses a LIFO stack, which prioritizes the most recently discovered vertex and tends to explore deep paths early. DFS is useful for structural graph tasks such as connectivity checks and cycle-related analysis. With adjacency lists, the running time is $O(|V|+|E|)$, and the auxiliary space is $O(|V|)$ in the worst case due to the stack and visited array.
+
+\textbf{Pseudocode:}
+\begin{lstlisting}
+DFS(graph, source):
+    visited <- array[|V|] initialized false
+    stack <- empty LIFO stack
+    push source in stack
+
+    while stack not empty:
+        u <- pop from stack
+        if visited[u]: continue
+        visited[u] <- true
+        for each v in graph[u]:
+            if not visited[v]:
+                push v in stack
+\end{lstlisting}
+
+\textbf{Python code:}
+\begin{lstlisting}[language=Python]
+def dfs(graph, source=0):
+    visited = [False] * len(graph)
+    stack = [source]
+
+    while stack:
+        node = stack.pop()
+        if visited[node]:
+            continue
+        visited[node] = True
+        for neighbor in graph[node]:
+            if not visited[neighbor]:
+                stack.append(neighbor)
+\end{lstlisting}
+
+\newpage
+\section{Empirical Results by Criteria}
+The empirical analysis is split into one global time-scaling criterion and seven structure-specific criteria. Every measurement shown is the average of five runs.
+
+\subsection{Execution Time Scaling}
+This comparison uses connected sparse graphs with increasing $n$ and $m \approx 4n$. It works as a baseline benchmark: for each graph size, BFS and DFS are executed five times and the average time is recorded.
+
+This criterion evaluates scalability and checks whether practical runtime follows the expected $O(|V|+|E|)$ behavior. In general, it is the most important global indicator because it summarizes how performance evolves when input size increases, independent of a specific graph topology.
+
+\input{results/bfs_table.tex}
+\input{results/dfs_table.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/comparison.png}
+    \caption{Execution Time Scaling: BFS vs DFS}
+\end{figure}
+
+Both algorithms grow close to linearly. Small gaps between curves are caused by constant factors such as queue/stack operations, memory locality, and neighbor processing order.
+
+\subsection{Chain/Path}
+This comparison uses a path graph with a deep target near the end. The search works in a nearly deterministic way because each node has very limited branching.
+
+It evaluates behavior on low-branching structures, where exploration order has little freedom. As a general observation, this criterion is useful because it approximates worst-case deep traversal with minimal structural complexity.
+
+\input{results/scenario_chain_path_table.tex}
+In a path graph with a deep target, there are almost no branching decisions. As a result, BFS and DFS perform similarly because both must move through nearly the same sequence of vertices before reaching the target.
+
+\subsection{Balanced Tree}
+This comparison uses a balanced tree and a deep-leaf target. The search starts from the root and must decide between breadth expansion and depth exploration.
+
+It evaluates sensitivity to hierarchical branching and target depth. In general, this criterion shows how quickly each algorithm converges when there are many sibling nodes at each level.
+
+\input{results/scenario_balanced_tree_table.tex}
+In a balanced tree, BFS expands all nodes level by level, while DFS follows one branch at a time. For deep-leaf targets, DFS can be faster if the chosen branch leads quickly toward the target, while BFS pays the cost of full-level expansion.
+
+\subsection{Dense/Complete}
+This comparison uses a complete graph with a near-source target. Every node is connected to almost every other node, so branching factor is maximal.
+
+It evaluates behavior under extreme connectivity, where frontier growth can be very high. As general information, this criterion highlights overhead from large candidate sets and immediate target availability.
+
+\input{results/scenario_dense_complete_table.tex}
+In complete graphs, branching factor is maximal. For near-source targets, BFS can terminate very quickly after first-level expansion, while DFS may still push a large number of nodes depending on stack order before confirming the target.
+
+\subsection{Grid}
+This comparison uses a 2D grid with source and target in opposite corners. The search has many equivalent paths and geometric constraints.
+
+It evaluates spatial exploration behavior and practical cost of path-order decisions. In general, this criterion is important because grid-like structures appear frequently in routing, maps, and game-state navigation.
+
+\input{results/scenario_grid_table.tex}
+Grid graphs impose geometric constraints and many alternative paths. BFS propagates as a wave from the source, while DFS explores long directional paths first. The observed difference reflects traversal order and constant overhead, not complexity class change.
+
+\subsection{Deep vs Shallow}
+This comparison uses the same graph structure with two target placements: one shallow and one deep. The procedure isolates target depth as the main changing factor.
+
+It evaluates how robust each algorithm is when only the target position changes. As a general benchmark, this criterion is useful because it separates structure effects from search-depth effects.
+
+\input{results/scenario_deep_vs_shallow_table.tex}
+This comparison uses the same graph with two target positions. For shallow targets, BFS is advantaged because it checks near levels first; for deep targets, DFS can win by going deep early and finding the target before full breadth expansion.
+
+\subsection{Large Random}
+This comparison uses a large random sparse graph with a random target. It reproduces a less structured and more realistic search environment.
+
+It evaluates average-case practical behavior where local connectivity patterns are irregular. In general, this criterion is a good proxy for real applications where topology is not neatly layered or geometric.
+
+\input{results/scenario_large_random_table.tex}
+On large random sparse graphs, both algorithms remain in the same practical range. Differences come from local structure around the source/target and from adjacency ordering, which can alter how quickly the search reaches the target.
+
+\subsection{Disconnected}
+This comparison uses a disconnected graph where the target is unreachable from the source. The search must terminate with a failure result.
+
+It evaluates correctness and cost in negative cases, not only successful hits. As general information, this criterion is essential for validating algorithm behavior in incomplete or fragmented datasets.
+
+\input{results/scenario_disconnected_table.tex}
+This comparison validates negative search behavior. When target is unreachable, both algorithms must exhaust the entire reachable component from the source; both correctly return not found, with comparable runtime.
+
+\subsection{Cross-Criteria Comparison}
+Across all criteria, neither algorithm dominates in every case. The results show a clear pattern driven by graph shape and target depth.
+
+Looking at all criteria together, the execution-scaling benchmark confirms that both algorithms have similar asymptotic behavior and remain close in average runtime. The differences become clearer in structural scenarios: BFS is generally stronger when targets are shallow or when level-order discovery is beneficial, while DFS gains advantage when deeper exploration reaches the target earlier than full breadth expansion.
+
+In low-branching structures such as Chain/Path, the two algorithms are naturally close because there are few traversal choices. In highly connected or irregular structures such as Dense/Complete, Grid, and Large Random, constant factors and traversal order have a stronger influence on measured time. In the Disconnected case, both algorithms show correct behavior by returning not found after exhausting the reachable component.
+
+Overall, the results describe a complementary relationship: BFS is usually preferred for shortest-path style search and shallow targets, while DFS is often competitive or better for deep-target exploration and structural analysis workflows.
+
+\section{Conclusion}
+The empirical results are consistent with theory: both BFS and DFS scale approximately linearly with the size of the graph when using adjacency lists, matching the expected $O(|V|+|E|)$ complexity.
+
+In terms of runtime, the two algorithms are close, with differences caused by queue/stack operations, adjacency order, and target location. No asymptotic advantage is observed for one algorithm over the other.
+
+For BFS, the main strengths observed in this laboratory are shortest-path correctness in unweighted graphs, strong performance for shallow or near-source targets, and a deterministic level-by-level expansion that is easy to interpret. Its main weakness is memory pressure on wide graphs, because the queue frontier can become large, and this can increase runtime for deep-target searches.
+
+For DFS, the main strengths are implementation simplicity, competitive behavior on deep-target scenarios, and usefulness for structural analyses such as connectivity and cycle-related workflows. Its main limitation is that it does not guarantee shortest paths, and in some layouts it can spend time on deep branches that do not lead quickly to the target.
+
+Overall, BFS is the better choice for shortest-path and level-distance tasks, while DFS is often preferable for deep structural exploration where path optimality is not required.
+
+\newpage
+\section{Annex}
+
+GitHub Repository: \url{https://github.com/Lucariowu/aalabs/tree/main/Lab3}
+
+\end{document}

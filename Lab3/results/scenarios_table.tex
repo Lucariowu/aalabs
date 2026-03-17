@@ -1,0 +1,27 @@
+\begin{table}[H]
+\centering
+\caption{Scenario-based BFS and DFS Results}
+\small
+\begin{tabular}{llrrlrr}
+\toprule
+Scenario & Alg. & Nodes & Edges & Target type & Found & Avg time (ms)\\
+\midrule
+Chain/Path & BFS & 20000 & 19999 & deep target & True & 4.0596\\
+Chain/Path & DFS & 20000 & 19999 & deep target & True & 3.4265\\
+Balanced Tree & BFS & 9841 & 9840 & deep leaf & True & 1.6935\\
+Balanced Tree & DFS & 9841 & 9840 & deep leaf & True & 0.0130\\
+Dense/Complete & BFS & 2000 & 1999000 & any neighbor & True & 0.0772\\
+Dense/Complete & DFS & 2000 & 1999000 & any neighbor & True & 59.1969\\
+Grid & BFS & 14400 & 28560 & opposite corner & True & 4.3983\\
+Grid & DFS & 14400 & 28560 & opposite corner & True & 0.0667\\
+Deep vs Shallow & BFS & 1023 & 1022 & shallow & True & 0.0038\\
+Deep vs Shallow & DFS & 1023 & 1022 & shallow & True & 0.0908\\
+Deep vs Shallow & BFS & 1023 & 1022 & deep & True & 0.1592\\
+Deep vs Shallow & DFS & 1023 & 1022 & deep & True & 0.0048\\
+Large Random & BFS & 4500 & 15367 & random target & True & 2.0991\\
+Large Random & DFS & 4500 & 15367 & random target & True & 0.7826\\
+Disconnected & BFS & 8000 & 7998 & unreachable & False & 0.6582\\
+Disconnected & DFS & 8000 & 7998 & unreachable & False & 0.6878\\
+\bottomrule
+\end{tabular}
+\end{table}

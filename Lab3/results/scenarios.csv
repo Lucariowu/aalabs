@@ -1,0 +1,17 @@
+scenario,algorithm,nodes,edges,target_type,found,avg_time_ms,max_frontier
+Chain/Path,BFS,20000,19999,deep target,True,4.059630801202729,1
+Chain/Path,DFS,20000,19999,deep target,True,3.4264852009073365,1
+Balanced Tree,BFS,9841,9840,deep leaf,True,1.6934774001128972,6561
+Balanced Tree,DFS,9841,9840,deep leaf,True,0.01296219925279729,17
+Dense/Complete,BFS,2000,1999000,any neighbor,True,0.07721559886704199,1999
+Dense/Complete,DFS,2000,1999000,any neighbor,True,59.196864800469484,1999
+Grid,BFS,14400,28560,opposite corner,True,4.398286801006179,120
+Grid,DFS,14400,28560,opposite corner,True,0.066697399597615,237
+Deep vs Shallow,BFS,1023,1022,shallow,True,0.0037714002246502787,2
+Deep vs Shallow,DFS,1023,1022,shallow,True,0.0907645997358486,10
+Deep vs Shallow,BFS,1023,1022,deep,True,0.15918019926175475,512
+Deep vs Shallow,DFS,1023,1022,deep,True,0.004777199501404539,10
+Large Random,BFS,4500,15367,random target,True,2.099097200698452,2579
+Large Random,DFS,4500,15367,random target,True,0.7825626009434927,2627
+Disconnected,BFS,8000,7998,unreachable,False,0.6581624002137687,1
+Disconnected,DFS,8000,7998,unreachable,False,0.6877892003103625,1
